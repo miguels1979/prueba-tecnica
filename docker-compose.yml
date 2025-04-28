@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  percentage-calculation-api:
+    build:
+      context: percentage-calculation-api
+      dockerfile: Dockerfile
+    container_name: percentage-calculation-api
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+    networks:
+      - percentage-net
+
+  percentage-provider-service:
+    build:
+      context: percentage-provider-service
+      dockerfile: Dockerfile
+    container_name: percentage-provider-service
+    ports:
+      - "8081:8081"
+    networks:
+      - percentage-net
+
+  db:
+    image: postgres:latest
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"  # Exponer el puerto de la base de datos
+    networks:
+      - percentage-net
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+networks:
+  percentage-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

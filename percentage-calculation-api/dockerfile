@@ -1,0 +1,14 @@
+# Usamos la imagen oficial de OpenJDK
+FROM openjdk:21-jdk-slim
+
+# Establecemos el directorio de trabajo
+WORKDIR /app
+
+# Copiamos el jar de tu aplicación en el contenedor
+COPY target/percentage-calculation-api-*.jar /app/percentage-calculation-api.jar
+
+# Exponemos el puerto 8082 para la API
+EXPOSE 8082
+
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "percentage-calculation-api.jar"]
