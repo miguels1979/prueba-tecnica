@@ -1,6 +1,7 @@
 package com.tektonlabs.percentagecalculationapi.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.tektonlabs.percentagecalculationapi.exceptions.ProviderUnavailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,8 +23,6 @@ public class PercentageService {
 
     @Cacheable(value = "percentageCache", key = "'percentage'", unless = "#result == null", cacheManager = "cacheManager")
     public double getPercentageFromProvider() {
-        double percentage = 0.0;
-
             try {
                 WebClient webClient = this.webClientBuilder.build();
                 JsonNode block = webClient.method(HttpMethod.GET)
@@ -34,11 +33,12 @@ public class PercentageService {
                 if (block == null) {
                     throw new RuntimeException("Response is null");
                 }
-                percentage =  block.get("percentage").asDouble();
-            }catch(Exception e){
+                return block.get("percentage").asDouble();
+            }catch(RuntimeException e){
                 logger.error(e.getMessage());
+                throw new ProviderUnavailableException(e.getMessage());
             }
-            return percentage;
+
     }
 
 }

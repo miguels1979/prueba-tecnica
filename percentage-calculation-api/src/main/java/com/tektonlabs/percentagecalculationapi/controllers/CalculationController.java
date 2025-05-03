@@ -1,5 +1,6 @@
 package com.tektonlabs.percentagecalculationapi.controllers;
 
+import com.tektonlabs.percentagecalculationapi.exceptions.ProviderUnavailableException;
 import com.tektonlabs.percentagecalculationapi.services.CalculationService;
 import com.tektonlabs.percentagecalculationapi.services.HistoryService;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,8 @@ public class CalculationController {
         } catch (Exception e){
             historyService.saveHistory(LocalDateTime.now(),"/calculate"
                     , parameters, "Error: ".concat(e.getMessage()));
-            return ResponseEntity.status(500).body("error");
+            throw new ProviderUnavailableException(e.getMessage());
+
         }
     }
 

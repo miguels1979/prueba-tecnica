@@ -32,17 +32,21 @@ public class CacheConfig {
     }
 
     static class ExpiringMap<K, V> extends ConcurrentHashMap<K, V> {
-        private final long expirationTimeMillis;
         private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
         ExpiringMap(long expirationInMinutes) {
             super();
-            this.expirationTimeMillis = expirationInMinutes * 60 * 1000;
-            startCleanupTask();
+            long expirationInMillis = expirationInMinutes * 60 * 1000; // Convertimos a milisegundos
+            startCleanupTask(expirationInMillis);
         }
 
-        private void startCleanupTask() {
-
+        private void startCleanupTask(long expirationInMillis) {
+            scheduler.scheduleAtFixedRate(() -> {
+                try {
+                    this.clear();
+                } catch (Exception ignored) {
+                }
+            }, expirationInMillis, expirationInMillis, java.util.concurrent.TimeUnit.MILLISECONDS);
         }
     }
 }

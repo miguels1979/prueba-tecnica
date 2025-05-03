@@ -2,6 +2,8 @@ package com.tektonlabs.percentagecalculationapi.services;
 
 import org.springframework.stereotype.Service;
 
+import java.net.UnknownHostException;
+
 @Service
 public class CalculationService {
 
@@ -11,7 +13,7 @@ public class CalculationService {
         this.percentageService = percentageService;
     }
 
-    public double calculate(double num1, double num2){
+    public double calculate(double num1, double num2) {
         double percentage = percentageService.getPercentageFromProvider();
         return (num1 + num2) * (1 + percentage / 100);
     }
