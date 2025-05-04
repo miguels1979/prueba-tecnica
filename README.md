@@ -30,7 +30,7 @@ Esto levantará:
 
 ### 4. Acceder a la API
 Accede a la documentación Swagger en tu navegador:
-http://localhost:8082/swagger-ui/index.html
+http://localhost:8082/webjars/swagger-ui/index.html
 
 ### Estructura de Carpetas
 prueba-tecnica/
