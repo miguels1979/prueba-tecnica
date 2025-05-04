@@ -14,20 +14,40 @@ Este microservicio permite calcular un porcentaje basado en valores dinámicos o
 
 ### 1. Clonar el repositorio
 
-git clone https://github.com/tu-repositorio/percentage-calculation-api.git
-cd percentage-calculation-api
+git clone https://github.com/tu-repositorio/prueba-tecnica.git
+cd prueba-tecnica
 
-### 2. Construir el proyecto con Maven
-mvn clean install
+### 2. Construir las imágenes  de Docker (sin usar caché)
+docker-compose build --no-cache
 
-### 3. Ejecutar el servicio en un contenedor Docker
-Paso 1: Construir las imágenes de Docker para ambos microservicios
-Para el microservicio percentage-calculation-api:
-docker build -t percentage-calculation-api .
-Para el microservicio percentage-provider-service:
-docker build -t percentage-provider-service .
-Paso 2: Iniciar los contenedores de los microservicios y de la base de datos Postgres
+### 3. Levantar los contenedores
 docker-compose up -d
+
+Esto levantará:
+- Base de datos PostgreSQL (localhost:5432)
+- Microservicio percentage-provider-service (localhost:8081)
+- Microservicio percentage-calculation-api (localhost:8082)
+
 ### 4. Acceder a la API
+Accede a la documentación Swagger en tu navegador:
 http://localhost:8082/swagger-ui/index.html
+
+### Estructura de Carpetas
+prueba-tecnica/
+│
+├── docker-compose.yml
+├── Dockerfile
+├── percentage-calculation-api/
+├── percentage-provider-service/
+└── ...
+
+### 5. Apagar y limpiar contenedores
+
+- Para detener los contenedores:
+    docker-compose down
+- Para limpiar volúmenes y redes (opcional):
+    docker-compose down -v --remove-orphans
+
+
+
 
