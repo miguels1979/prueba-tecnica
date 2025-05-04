@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.tektonlabs.percentagecalculationapi.exceptions.ProviderUnavailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class PercentageService {
 
     private final WebClient.Builder webClientBuilder;
+
+    @Value("${provider.service.url}")
+    private String providerUrl;
 
     private static final Logger logger = LoggerFactory.getLogger(PercentageService.class);
 
@@ -26,7 +30,7 @@ public class PercentageService {
             try {
                 WebClient webClient = this.webClientBuilder.build();
                 JsonNode block = webClient.method(HttpMethod.GET)
-                        .uri("http://localhost:8081/api/v1/percentage")
+                        .uri(providerUrl)
                         .retrieve()
                         .bodyToMono(JsonNode.class)
                         .block();
