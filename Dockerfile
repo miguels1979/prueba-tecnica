@@ -15,5 +15,7 @@ ENV SERVICE_JAR=${SERVICE}.jar
 # Copiar el JAR deseado (uno por imagen)
 COPY --from=builder /build/${SERVICE}/target/${SERVICE}-0.0.1-SNAPSHOT.jar /app/${SERVICE}.jar
 
-EXPOSE 8080
+# EXPOSE 8081  # para percentage-provider-service
+# EXPOSE 8082  # para percentage-calculation-api
+
 CMD ["sh", "-c", "java -jar ${SERVICE_JAR}"]
