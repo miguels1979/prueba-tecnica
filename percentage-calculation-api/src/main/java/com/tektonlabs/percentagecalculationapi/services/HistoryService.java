@@ -1,12 +1,15 @@
 package com.tektonlabs.percentagecalculationapi.services;
 
 
+import com.tektonlabs.percentagecalculationapi.dtos.HistoryDto;
 import com.tektonlabs.percentagecalculationapi.entities.HistoryEntity;
 import com.tektonlabs.percentagecalculationapi.repositories.HistoryRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class HistoryService {
@@ -23,8 +26,19 @@ public class HistoryService {
         historyRepository.save(historyEntity);
     }
 
-    public Iterable<HistoryEntity> getHistory(){
-        return historyRepository.findAll();
+    public List<HistoryDto> getHistoryDto(){
+        Iterable<HistoryEntity> entities = historyRepository.findAll();
+        List<HistoryDto> dtos =  new ArrayList<>();
+
+        for(HistoryEntity entity : entities){
+            dtos.add(new HistoryDto(
+                    entity.getDate(),
+                    entity.getEndPoint(),
+                    entity.getParameters(),
+                    entity.getResponse()
+            ));
+        }
+        return dtos;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.tektonlabs.percentagecalculationapi.controllers;
 
+import com.tektonlabs.percentagecalculationapi.dtos.HistoryDto;
 import com.tektonlabs.percentagecalculationapi.exceptions.ProviderUnavailableException;
 import com.tektonlabs.percentagecalculationapi.services.CalculationService;
 import com.tektonlabs.percentagecalculationapi.services.HistoryService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -38,7 +40,7 @@ public class CalculationController {
             @ApiResponse(responseCode = "500", description = "Error al obtener el porcentaje desde el proveedor")
     })
     @GetMapping("/calculate")
-    public ResponseEntity<?> calculate ( @Parameter(description = "Primer número") @RequestParam double num1,
+    public ResponseEntity<Double> calculate ( @Parameter(description = "Primer número") @RequestParam double num1,
                                          @Parameter(description = "Segundo número") @RequestParam double num2){
 
         String parameters = String.valueOf(num1).concat(",").concat(String.valueOf(num2));
@@ -60,7 +62,7 @@ public class CalculationController {
     )
     @ApiResponse(responseCode = "200", description = "Historial obtenido correctamente")
     @GetMapping("/history")
-    public ResponseEntity<?> getHistory(){
-        return ResponseEntity.ok(historyService.getHistory());
+    public ResponseEntity<List<HistoryDto>> getHistory(){
+        return ResponseEntity.ok(historyService.getHistoryDto());
     }
 }
